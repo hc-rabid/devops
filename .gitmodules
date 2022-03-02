@@ -1,0 +1,6 @@
+[submodule "wet-boew-dist"]
+	path = wet-boew-dist
+	url = https://github.com/wet-boew/wet-boew-dist/
+[submodule "themes-dist"]
+	path = themes-dist
+	url = https://github.com/wet-boew/themes-dist
