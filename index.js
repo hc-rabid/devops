@@ -24,8 +24,6 @@ app.post('/holidays', (req, res) =>{
   var result = holidays.filter(obj => {
     return obj.month === req.body.month;
   });
-  console.log(req.body.month);
-  console.log(result);
   res.send(result[0].holidays);
 });
 
