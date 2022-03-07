@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const PORT = 4000;
+const HOST = '0.0.0.0';
 
 const holidays = [
   {month: 'January', holidays: 'January 1st - New Years Day'},
@@ -27,7 +29,5 @@ app.post('/holidays', (req, res) =>{
   res.send(result[0].holidays);
 });
 
-
-
-const port = 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
