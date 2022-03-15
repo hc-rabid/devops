@@ -1,8 +1,72 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 const PORT = 4000;
 const HOST = '0.0.0.0';
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Holiday API",
+      version: "1.0.0",
+      description: "A simple express library for holidays in the year 2022"
+    },
+    servers: [
+      {
+        url: "http://localhost:4000"
+      }
+    ],
+  },
+  apis: ["*.js"],
+};
+
+const specs = swaggerJsDoc(options);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
+
+
+/**
+* @swagger
+* tags:
+*   name: Holidays
+*   description: Holidays 2022 API
+*
+*/
+
+/**
+* @swagger
+* components:
+*   schemas:
+*     Holiday:
+*       type: object
+*       required:
+*         - id
+*         - month
+*         - holidays
+*       properties:
+*         id:
+*           type: integer
+*           description: unique identifier for a month (1-12)
+*         month:
+*           type: string
+*           description: name of the Month
+*         holidays:
+*           type: string
+*           description: comma seperated string of holidays that coorespond to a given month
+*       example:
+*         id: 12
+*         month: December
+*         holidays: December 24th - Christmas Eve, December 25th - Christmas Day, December 26th - Boxing Day, December 31st - New Years Eve'
+*     Parameters:
+*       type: object
+*       properties:
+*         month:
+*           type: string
+*/
+
 
 const holidays = [
   {id: 1, month: 'January', holidays: 'January 1st - New Years Day'},
@@ -22,18 +86,67 @@ const holidays = [
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
+/**
+ * @swagger
+ * /holidays:
+ *   post:
+ *     summary: Return holidays given month param
+ *     tags: [Holidays]
+ *     consumes:
+ *     - application/x-www-form-urlencoded
+ *     requestBody:
+ *         content:
+ *           application/x-www-form-urlencoded:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 month:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Holidays displayed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Holiday'
+ */
+
 app.post('/holidays', (req, res) =>{
   var result = holidays.filter(obj => {
     return obj.month === req.body.month;
   });
-  res.send(result[0].holidays);
+  res.send(result[0]);
 });
+
+/**
+* @swagger
+* /holidays/month/{id}:
+*   get:
+*     summary: Returns list of holidays given month ID as a parameter
+*     tags: [Holidays]
+*     parameters:
+*     - in: path
+*       name: id
+*       schema:
+*         type: integer
+*       required: true
+*       description: This is the month ID
+*     responses:
+*       200:
+*         description: The holidays object specified
+*         content:
+*           application/JSON:
+*             schema:
+*               type: array
+*               items:
+*                 $ref: '#/components/schemas/Holiday'
+*/
 
 app.get('/holidays/month/:id', (req, res) =>{
   var result = holidays.filter(obj => {
     return obj.id === parseInt(req.params.id);
   });
-  res.json(result[0].holidays);
+  res.json(result[0]);
 })
 
 app.listen(PORT, HOST);
