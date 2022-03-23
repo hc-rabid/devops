@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const PORT = 4000;
 const HOST = '0.0.0.0';
+
+app.use(cors())
 
 const options = {
   definition: {
@@ -83,7 +86,6 @@ const holidays = [
   {id: 12, month: 'December', holidays: 'December 24th - Christmas Eve, December 25th - Christmas Day, December 26th - Boxing Day, December 31st - New Years Eve'}
 ];
 
-app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
 /**
