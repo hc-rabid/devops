@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-const PORT = 4000;
+const PORT = 3000;
 const HOST = '0.0.0.0';
 
 app.use(cors())
@@ -19,7 +19,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000"
+        url: "http://localhost"
       }
     ],
   },
