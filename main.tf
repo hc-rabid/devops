@@ -12,6 +12,11 @@ provider "docker" {
   host    = "unix:///var/run/docker.sock"
 }
 
+resource "docker_network" "appnet" {
+  name = "appnet"
+  driver = "bridge"
+}
+
 resource "docker_image" "server_image" {
   name = "server_image:latest"
 
@@ -23,6 +28,18 @@ resource "docker_image" "server_image" {
 resource "docker_container" "server_container" {
   name  = "server_container"
   image = docker_image.server_image.latest
+
+
+  networks_advanced {
+    name = "appnet"
+  }
+
+  ports{
+    external = 81
+    internal = 80
+  }
+
+  depends_on = [docker_network.appnet]
 }
 
 resource "docker_image" "client_image" {
@@ -37,6 +54,18 @@ resource "docker_image" "client_image" {
 resource "docker_container" "client_container" {
   name  = "client_container"
   image = docker_image.client_image.latest
+
+
+  networks_advanced {
+    name = "appnet"
+  }
+
+  ports{
+    external = 82
+    internal = 80
+  }
+
+  depends_on = [docker_network.appnet]
 }
 
 resource "docker_image" "proxy_image" {
@@ -50,10 +79,16 @@ resource "docker_image" "proxy_image" {
 resource "docker_container" "proxy_container" {
   name  = "proxy_container"
   image = docker_image.proxy_image.latest
-  ports {
-    internal = 3000
-    external = 3000
+  restart = "on-failure"
+  networks_advanced {
+    name = "appnet"
   }
+  ports {
+    internal = 80
+    external = 80
+  }
+
+  depends_on = [docker_network.appnet]
 }
 
 # resource "docker_container" "server_container" {
