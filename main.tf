@@ -34,10 +34,10 @@ resource "docker_container" "server_container" {
     name = "appnet"
   }
 
-  ports{
-    external = 81
-    internal = 80
-  }
+  # ports{
+  #   # external = 81
+  #   internal = 80
+  # }
 
   depends_on = [docker_network.appnet]
 }
@@ -60,10 +60,10 @@ resource "docker_container" "client_container" {
     name = "appnet"
   }
 
-  ports{
-    external = 82
-    internal = 80
-  }
+  # ports{
+  #   # external = 82
+  #   internal = 80
+  # }
 
   depends_on = [docker_network.appnet]
 }

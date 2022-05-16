@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-const PORT = 3000;
+const PORT = 80;
 const HOST = '0.0.0.0';
 
 app.use(cors())
@@ -27,7 +27,7 @@ const options = {
 };
 
 const specs = swaggerJsDoc(options);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 
 
@@ -113,7 +113,7 @@ app.use(bodyParser.urlencoded({extended:true}));
  *               $ref: '#/components/schemas/Holiday'
  */
 
-app.post('/holidays', (req, res) =>{
+app.post('/api/holidays', (req, res) =>{
   var result = holidays.filter(obj => {
     return obj.month === req.body.month;
   });
@@ -144,14 +144,14 @@ app.post('/holidays', (req, res) =>{
 *                 $ref: '#/components/schemas/Holiday'
 */
 
-app.get('/holidays/month/:id', (req, res) =>{
+app.get('/api/holidays/month/:id', (req, res) =>{
   var result = holidays.filter(obj => {
     return obj.id === parseInt(req.params.id);
   });
   res.json(result[0]);
 })
 
-app.listen(PORT, HOST);
+app.listen(PORT);
 console.log(`Running on http://${HOST}:${PORT}`);
 
   // fetch('/holidays/month/12')
