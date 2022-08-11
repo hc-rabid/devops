@@ -1,6 +1,6 @@
 pipeline{
     agent {
-        label 'ray-devops-training'
+        label 'devops-dev'
     }
     
     environment { 
@@ -25,7 +25,7 @@ pipeline{
         stage('Plan'){
             steps{
                 sh 'terraform init -input=false'
-                sh 'terraform plan -input=false'
+                sh 'terraform plan -input=false -var container_registry=${containerRegistry}'
             }
         }
         //stage terraform apply
@@ -55,6 +55,9 @@ pipeline{
             script {
                 resultString = "Failure"
             }
+        }
+        cleanup {
+            emailext body: "<p>See build result details at: <a href='${env.JOB_URL}'>${env.JOB_URL}</a></p>", mimeType: 'text/html; charset=UTF-8', recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'DevelopersRecipientProvider'], [$class: 'UpstreamComitterRecipientProvider'], [$class: 'RequesterRecipientProvider']], replyTo: 'devops@hc-sc.gc.ca', subject: "${currentBuild.fullDisplayName} ${resultString}"
         }
     }
 }

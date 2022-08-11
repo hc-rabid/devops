@@ -12,11 +12,13 @@ provider "docker" {
   host    = "unix:///var/run/docker.sock"
 }
 
+# Create private network for containers
 resource "docker_network" "appnet" {
   name = "appnet"
   driver = "bridge"
 }
 
+# Build docker images for server, client, and proxy
 resource "docker_image" "server_image" {
   name = "server_image:latest"
 
@@ -25,7 +27,37 @@ resource "docker_image" "server_image" {
   }
 }
 
-resource "docker_container" "server_container" {
+resource "docker_image" "client_image" {
+  name = "client_image:latest"
+
+  build {
+      path = "./public/"
+  }
+
+}
+
+resource "docker_image" "proxy_image" {
+  name = "proxy_image:latest"
+
+  build {
+      path = "./proxy/"
+  }
+}
+
+# Docker push command to container registry
+resource "null_resource" "docker_push" {
+    provisioner "local-exec" {
+    command = <<-EOT
+      docker tag devops-training-ray:latest jill.hc-sc.gc.ca/devops/devops-training-ray/devops-training-ray:latest
+      docker push jill.hc-sc.gc.ca/devops/devops-training-ray/devops-training-ray:latest
+    EOT
+    }
+    depends_on = [
+      docker_image.server_image, docker_image.client_image, docker_image.proxy_image
+    ]
+}
+
+resource "docker_container" "server_container" { 
   name  = "server_container"
   image = docker_image.server_image.latest
 
@@ -40,15 +72,6 @@ resource "docker_container" "server_container" {
   # }
 
   depends_on = [docker_network.appnet]
-}
-
-resource "docker_image" "client_image" {
-  name = "client_image:latest"
-
-  build {
-      path = "./public/"
-  }
-
 }
 
 resource "docker_container" "client_container" {
@@ -68,13 +91,7 @@ resource "docker_container" "client_container" {
   depends_on = [docker_network.appnet]
 }
 
-resource "docker_image" "proxy_image" {
-  name = "proxy_image:latest"
 
-  build {
-      path = "./proxy/"
-  }
-}
 
 resource "docker_container" "proxy_container" {
   name  = "proxy_container"
