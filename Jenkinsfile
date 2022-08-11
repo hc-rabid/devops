@@ -34,7 +34,7 @@ pipeline{
         //stage terraform apply
         stage('Apply'){
             steps{
-                sh 'terraform apply -input=false'
+                sh 'terraform apply -auto-approve'
             }
         }
     }
