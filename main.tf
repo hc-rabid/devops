@@ -48,8 +48,13 @@ resource "docker_image" "proxy_image" {
 resource "null_resource" "docker_push" {
     provisioner "local-exec" {
     command = <<-EOT
-      docker tag devops-training-ray:latest jack.hc-sc.gc.ca/devops/devops-training-ray/devops-training-ray:latest
-      docker push jack.hc-sc.gc.ca/devops/devops-training-ray/devops-training-ray:latest
+      docker tag server_image:latest jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
+      docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
+      docker tag client_image:latest jack.hc-sc.gc.ca/devops/ray-test/client_image:latest
+      docker push jack.hc-sc.gc.ca/devops/ray-test/client_image:latest
+      docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/ray-test/proxy_image:latest
+      docker push jack.hc-sc.gc.ca/devops/ray-test/proxy_image:latest
+
     EOT
     }
     depends_on = [
