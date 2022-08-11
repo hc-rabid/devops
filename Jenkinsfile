@@ -24,8 +24,11 @@ pipeline{
         //stage terraform init
         stage('Plan'){
             steps{
-                sh 'terraform init -input=false'
-                sh 'terraform plan -input=false -var container_registry=${containerRegistry}'
+                sh """
+                    docker login -u ${containerRegistryCredentials_USR} -p ${containerRegistryCredentials_PSW} ${containerRegistry}
+                    terraform init -input=false
+                    terraform plan -input=false
+                """
             }
         }
         //stage terraform apply
