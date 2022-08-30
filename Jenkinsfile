@@ -27,7 +27,7 @@ pipeline{
                 sh """
                     docker login -u ${containerRegistryCredentials_USR} -p ${containerRegistryCredentials_PSW} ${containerRegistry}
                     terraform init -input=false
-                    terraform plan -input=false
+                    terraform plan -input=false -var version={$version}
                 """
             }
         }
