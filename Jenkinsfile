@@ -34,7 +34,7 @@ pipeline{
         //stage terraform apply
         stage('Apply'){
             steps{
-                sh 'terraform apply -auto-approve'
+                sh 'terraform apply -auto-approve -var image_version={$version}'
             }
         }
     }
