@@ -8,7 +8,7 @@ terraform {
   }
 }
 
-variable "version" {
+variable "image_version" {
   type=string
   default="latest"
 }
@@ -25,7 +25,7 @@ resource "docker_network" "appnet" {
 
 # Build docker images for server, client, and proxy
 resource "docker_image" "server_image" {
-  name = "server_image:${var.version}"
+  name = "server_image:${var.image_version}"
 
   build {
       path = "."
@@ -33,7 +33,7 @@ resource "docker_image" "server_image" {
 }
 
 resource "docker_image" "client_image" {
-  name = "client_image:${var.version}"
+  name = "client_image:${var.image_version}"
 
   build {
       path = "./public/"
@@ -42,7 +42,7 @@ resource "docker_image" "client_image" {
 }
 
 resource "docker_image" "proxy_image" {
-  name = "proxy_image:${var.version}"
+  name = "proxy_image:${var.image_version}"
 
   build {
       path = "./proxy/"
@@ -53,12 +53,12 @@ resource "docker_image" "proxy_image" {
 resource "null_resource" "docker_push" {
     provisioner "local-exec" {
     command = <<-EOT
-      docker tag server_image:${var.version} jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.version}
-      docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.version}
-      docker tag client_image:${var.version} jack.hc-sc.gc.ca/devops/ray-test/client_image:${version}
-      docker push jack.hc-sc.gc.ca/devops/ray-test/client_image:${var.version}
-      docker tag proxy_image:${var.version} jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.version}
-      docker push jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.version}
+      docker tag server_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.image_version}
+      docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.image_version}
+      docker tag client_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/client_image:${image_version}
+      docker push jack.hc-sc.gc.ca/devops/ray-test/client_image:${var.image_version}
+      docker tag proxy_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.image_version}
+      docker push jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.image_version}
 
     EOT
     }
@@ -69,7 +69,7 @@ resource "null_resource" "docker_push" {
 
 resource "docker_container" "server_container" { 
   name  = "server_container"
-  image = docker_image.server_image.var.version
+  image = docker_image.server_image.var.image_version
 
 
   networks_advanced {
@@ -86,7 +86,7 @@ resource "docker_container" "server_container" {
 
 resource "docker_container" "client_container" {
   name  = "client_container"
-  image = docker_image.client_image.var.version
+  image = docker_image.client_image.var.image_version
 
 
   networks_advanced {
