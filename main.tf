@@ -8,6 +8,11 @@ terraform {
   }
 }
 
+variable "version" {
+  type=string
+  default="latest"
+}
+
 provider "docker" {
   host    = "unix:///var/run/docker.sock"
 }
