@@ -67,7 +67,7 @@ resource "null_resource" "docker_push" {
 }
 
 resource "docker_container" "server_container" { 
-  name  = "server_container"
+  name  = "server_container:${var.image_version}"
   image = "docker_image.server_image:${var.image_version}"
 
 
@@ -84,7 +84,7 @@ resource "docker_container" "server_container" {
 }
 
 resource "docker_container" "client_container" {
-  name  = "client_container"
+  name  = "client_container:${var.image_version}"
   image = "docker_image.client_image:${var.image_version}"
 
 
@@ -103,7 +103,7 @@ resource "docker_container" "client_container" {
 
 
 resource "docker_container" "proxy_container" {
-  name  = "proxy_container"
+  name  = "proxy_container:${var.image_version}"
   image = "jack.hc-sc.gc.ca/base/haproxy:5.0.118-http"
   restart = "on-failure"
   networks_advanced {
