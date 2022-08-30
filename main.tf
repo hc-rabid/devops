@@ -100,15 +100,34 @@ resource "docker_container" "client_container" {
 
 resource "docker_container" "proxy_container" {
   name  = "proxy_container"
-  image = docker_image.proxy_image.latest
+  image = "jack.hc-sc.gc.ca/base/haproxy:5.0.118-http"
   restart = "on-failure"
   networks_advanced {
     name = "appnet"
   }
   ports {
+    internal = 443
+    external = 443
+  }
+  ports {
+    internal = 8400
+    external = 8400
+    ip= "127.0.0.1"
+  }
+  ports {
     internal = 80
     external = 80
   }
+  volumes {
+		host_path = "/var/opt/devops/ops/raytest/ha-body.cfg"
+		container_path = "/usr/local/etc/haproxy/ha-body.cfg"
+		read_only = true
+	}
+	volumes {
+		host_path = "/var/opt/devops/ops/certs.d/"
+		container_path = "/usr/local/etc/haproxy/certs.d/"
+		read_only = true
+	}
 
   depends_on = [docker_network.appnet]
 }
