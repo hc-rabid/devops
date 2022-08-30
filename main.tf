@@ -55,7 +55,7 @@ resource "null_resource" "docker_push" {
     command = <<-EOT
       docker tag server_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.image_version}
       docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:${var.image_version}
-      docker tag client_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/client_image:${image_version}
+      docker tag client_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/client_image:${var.image_version}
       docker push jack.hc-sc.gc.ca/devops/ray-test/client_image:${var.image_version}
       docker tag proxy_image:${var.image_version} jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.image_version}
       docker push jack.hc-sc.gc.ca/devops/ray-test/proxy_image:${var.image_version}
