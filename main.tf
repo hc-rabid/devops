@@ -69,7 +69,7 @@ resource "null_resource" "docker_push" {
 
 resource "docker_container" "server_container" { 
   name  = "server_container"
-  image = docker_image.server_image.var.image_version
+  image = "docker_image.server_image.${var.image_version}"
 
 
   networks_advanced {
@@ -86,7 +86,7 @@ resource "docker_container" "server_container" {
 
 resource "docker_container" "client_container" {
   name  = "client_container"
-  image = docker_image.client_image.var.image_version
+  image = "docker_image.client_image.${var.image_version}"
 
 
   networks_advanced {
