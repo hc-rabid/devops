@@ -47,6 +47,7 @@ resource "docker_image" "proxy_image" {
 resource "null_resource" "docker_push" {
     provisioner "local-exec" {
     command = <<-EOT
+      . /var/opt/devops/ops/ray-test/var_setup.sh
       docker tag server_image:latest jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
       docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
       docker tag client_image:latest jack.hc-sc.gc.ca/devops/ray-test/client_image:latest
@@ -100,7 +101,6 @@ resource "docker_container" "client_container" {
 resource "docker_container" "proxy_container" {
   name  = "proxy_container"
   image = "jack.hc-sc.gc.ca/base/haproxy:5.0.118-http"
-  restart = "on-failure"
   networks_advanced {
     name = "rays-network"
   }
