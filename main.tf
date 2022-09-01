@@ -63,7 +63,7 @@ resource "null_resource" "docker_push" {
 
 resource "docker_container" "server_container" { 
   name  = "server_container"
-  image = server_image.latest
+  image = docker_container.server_image.name
 
 
   networks_advanced {
@@ -80,7 +80,7 @@ resource "docker_container" "server_container" {
 
 resource "docker_container" "client_container" {
   name  = "client_container"
-  image = client_image.latest
+  image = docker_image.client_image.name
 
 
   networks_advanced {
