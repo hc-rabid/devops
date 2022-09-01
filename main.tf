@@ -17,9 +17,8 @@ provider "docker" {
 }
 
 # Create private network for containers
-resource "docker_network" "appnet" {
-  name = "appnet"
-  driver = "bridge"
+resource "docker_network" "rays-network" {
+  name = "rays-network"
 }
 
 # Build docker images for server, client, and proxy
@@ -67,12 +66,12 @@ resource "null_resource" "docker_push" {
 }
 
 resource "docker_container" "server_container" { 
-  name  = "server_container:${var.image_version}"
+  name  = "server_container"
   image = "docker_image.server_image:${var.image_version}"
 
 
   networks_advanced {
-    name = "appnet"
+    name = "rays-network"
   }
 
   # ports{
@@ -80,16 +79,16 @@ resource "docker_container" "server_container" {
   #   internal = 80
   # }
 
-  depends_on = [docker_network.appnet]
+  depends_on = [docker_network.rays-network]
 }
 
 resource "docker_container" "client_container" {
-  name  = "client_container:${var.image_version}"
+  name  = "client_container"
   image = "docker_image.client_image:${var.image_version}"
 
 
   networks_advanced {
-    name = "appnet"
+    name = "rays-network"
   }
 
   # ports{
@@ -97,17 +96,17 @@ resource "docker_container" "client_container" {
   #   internal = 80
   # }
 
-  depends_on = [docker_network.appnet]
+  depends_on = [docker_network.rays-network]
 }
 
 
 
 resource "docker_container" "proxy_container" {
-  name  = "proxy_container:${var.image_version}"
+  name  = "proxy_container"
   image = "jack.hc-sc.gc.ca/base/haproxy:5.0.118-http"
   restart = "on-failure"
   networks_advanced {
-    name = "appnet"
+    name = "rays-network"
   }
   ports {
     internal = 443
@@ -133,7 +132,7 @@ resource "docker_container" "proxy_container" {
 		read_only = true
 	}
 
-  depends_on = [docker_network.appnet]
+  depends_on = [docker_network.rays-network]
 }
 
 # resource "docker_container" "server_container" {
@@ -144,7 +143,7 @@ resource "docker_container" "proxy_container" {
 #   must_run = true
 
 #     networks_advanced {
-#         name = "appnet"
+#         name = "rays-network"
 # #        ipv4_address = "172.17.0.5"
 #     }
 #}
