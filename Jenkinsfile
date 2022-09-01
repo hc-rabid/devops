@@ -27,14 +27,14 @@ pipeline{
                 sh """
                     docker login -u ${containerRegistryCredentials_USR} -p ${containerRegistryCredentials_PSW} ${containerRegistry}
                     terraform init -input=false
-                    terraform plan -input=false -var image_version=${version}
+                    terraform plan -input=false
                 """
             }
         }
         //stage terraform apply
         stage('Apply'){
             steps{
-                sh 'terraform apply -auto-approve -var image_version=${version}'
+                sh 'terraform apply -auto-approve'
             }
         }
     }
