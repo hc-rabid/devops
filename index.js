@@ -151,7 +151,7 @@ app.get('/api/holidays/month/:id', (req, res) =>{
 })
 
 app.listen(PORT);
-console.log(`Running on http://${HOST}:${PORT}`);
+console.log(`Listening to Port: ${PORT}`);
 
   // fetch('/holidays/month/12')
   // .then(result => result.json())

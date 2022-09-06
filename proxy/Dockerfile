@@ -1,3 +1,3 @@
-FROM haproxy:2.3
+FROM haproxy:2.6
 
-COPY haproxy.cfg /var/opt/devops/ops/raytest/haproxy.cfg
+COPY haproxy.cfg /var/opt/devops/ops/raytest/
