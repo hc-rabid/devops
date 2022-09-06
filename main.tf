@@ -42,7 +42,8 @@ resource "docker_image" "proxy_image" {
       path = "./proxy/"
   }
 }
-
+      # docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
+      # docker push jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
 # Docker push command to container registry
 resource "null_resource" "docker_push" {
     provisioner "local-exec" {
@@ -51,8 +52,7 @@ resource "null_resource" "docker_push" {
       docker push jack.hc-sc.gc.ca/devops/raytest/server_image:latest
       docker tag client_image:latest jack.hc-sc.gc.ca/devops/raytest/client_image:latest
       docker push jack.hc-sc.gc.ca/devops/raytest/client_image:latest
-      docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
-      docker push jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
+
 
     EOT
     }
@@ -75,7 +75,7 @@ resource "docker_container" "server_container" {
   #   internal = 80
   # }
 
-  depends_on = [docker_network.rays-network]
+  depends_on = [docker_network.rays-network, null_resource.docker_push]
 }
 
 resource "docker_container" "client_container" {
@@ -92,7 +92,7 @@ resource "docker_container" "client_container" {
   #   internal = 80
   # }
 
-  depends_on = [docker_network.rays-network]
+  depends_on = [docker_network.rays-network, null_resource.docker_push]
 }
 
 
@@ -127,7 +127,7 @@ resource "docker_container" "proxy_container" {
 		read_only = true
 	}
 
-  depends_on = [docker_network.rays-network]
+  depends_on = [docker_network.rays-network, null_resource.docker_push]
 }
 
 # resource "docker_container" "server_container" {
