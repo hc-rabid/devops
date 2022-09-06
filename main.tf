@@ -53,7 +53,7 @@ resource "null_resource" "docker_push" {
       docker push jack.hc-sc.gc.ca/devops/raytest/client_image:latest
       docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
       docker push jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
-
+      cp /proxy/haproxy.cfg /var/opt/devops/raytest/haproxy.cfg
     EOT
     }
     depends_on = [
