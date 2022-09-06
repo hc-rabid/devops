@@ -47,13 +47,12 @@ resource "docker_image" "proxy_image" {
 resource "null_resource" "docker_push" {
     provisioner "local-exec" {
     command = <<-EOT
-      . /var/opt/devops/ops/ray-test/var_setup.sh
-      docker tag server_image:latest jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
-      docker push jack.hc-sc.gc.ca/devops/ray-test/server_image:latest
-      docker tag client_image:latest jack.hc-sc.gc.ca/devops/ray-test/client_image:latest
+      docker tag server_image:latest jack.hc-sc.gc.ca/devops/raytest/server_image:latest
+      docker push jack.hc-sc.gc.ca/devops/raytest/server_image:latest
+      docker tag client_image:latest jack.hc-sc.gc.ca/devops/raytest/client_image:latest
       docker push jack.hc-sc.gc.ca/devops/ray-test/client_image:latest
-      docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/ray-test/proxy_image:latest
-      docker push jack.hc-sc.gc.ca/devops/ray-test/proxy_image:latest
+      docker tag proxy_image:latest jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
+      docker push jack.hc-sc.gc.ca/devops/raytest/proxy_image:latest
 
     EOT
     }
