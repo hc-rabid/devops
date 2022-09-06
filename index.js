@@ -5,7 +5,6 @@ const cors = require('cors')
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const PORT = 80;
-const HOST = 'jack.hc-sc.gc.ca';
 
 app.use(cors())
 
@@ -19,7 +18,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://jack.hc-sc.gc.ca"
+        url: "http://dev.jack.hc-sc.gc.ca"
       }
     ],
   },

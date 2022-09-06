@@ -99,7 +99,7 @@ resource "docker_container" "client_container" {
 
 resource "docker_container" "proxy_container" {
   name  = "proxy_container"
-  image = "jack.hc-sc.gc.ca/base/haproxy:5.0.118-http"
+  image = "proxy_image"
   networks_advanced {
     name = "rays-network"
   }
