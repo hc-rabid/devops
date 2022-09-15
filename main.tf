@@ -109,8 +109,8 @@ resource "docker_container" "proxy_container" {
     external = 80
   }
   volumes {
-		host_path = "/var/opt/devops/ops/raytest/haproxy.cfg"
-		container_path = "/usr/local/etc/haproxy/haproxy.cfg"
+		host_path = "/var/opt/devops/ops/ha-body.cfg"
+		container_path = "/usr/local/etc/haproxy/ha-body.cfg"
 		read_only = true
 	}
 	volumes {
