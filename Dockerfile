@@ -15,5 +15,5 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 8081/tcp
+EXPOSE 8080/tcp
 CMD [ "node", "index.js" ]
