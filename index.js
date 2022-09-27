@@ -7,7 +7,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const PORT = 8080;
 
 app.use(cors())
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 const options = {
   definition: {
