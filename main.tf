@@ -119,23 +119,15 @@ resource "docker_container" "proxy_container" {
     external = 80
   }
   volumes {
-		host_path = "/var/opt/devops/ops/ha-body.cfg"
-		container_path = "/usr/local/etc/haproxy/ha-body.cfg"
-		read_only = true
-	}
+    host_path = "/var/opt/devops/ops/ha-body.cfg"
+    container_path = "/usr/local/etc/haproxy/ha-body.cfg"
+    read_only = true
+  }
+  volumes {
+    host_path = "/var/opt/devops/ops/certs.d/"
+    container_path = "/usr/local/etc/haproxy/certs.d/"
+    read_only = true
+  }
 
   depends_on = [docker_network.rays-network, null_resource.docker_push]
 }
-
-# resource "docker_container" "server_container" {
-#   name = "server_container"
-#   image = "server_image:${var.deploy-version}"
-#   restart = "always"
-#   start = true
-#   must_run = true
-
-#     networks_advanced {
-#         name = "rays-network"
-# #        ipv4_address = "172.17.0.5"
-#     }
-#}
